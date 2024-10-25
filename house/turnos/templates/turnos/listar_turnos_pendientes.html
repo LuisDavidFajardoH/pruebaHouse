@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Últimos 5 Turnos Pendientes</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4 mb-4">Últimos 5 Turnos Pendientes</h1>
+        <ul class="list-group">
+            {% for turno in turnos %}
+                <li class="list-group-item">
+                    <strong>Turno #{{ turno.numero_turno }}</strong> - Estado: {{ turno.get_estado_display }} - Creado el: {{ turno.fecha_creacion }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # turnos/urls.py
 from django.urls import path
-from .views import TurnoListView, TurnoCreateView, TurnoUpdateView, CambiarEstadoTurnoStaffView
+from .views import TurnoListView, TurnoCreateView, TurnoUpdateView, CambiarEstadoTurnoStaffView,TurnosPendientesView
 from .apis import UsuarioExistenciaAPIView, TurnoListAPIView
 
 urlpatterns = [
@@ -10,4 +10,5 @@ urlpatterns = [
     path('<int:pk>/cambiar-estado/', CambiarEstadoTurnoStaffView.as_view(), name='cambiar_estado'),
     path('api/usuario/<str:identificacion>/', UsuarioExistenciaAPIView.as_view(), name='validar_usuario'),
     path('api/turnos/', TurnoListAPIView.as_view(), name='listar_turnos'),
+    path('pendientes/', TurnosPendientesView.as_view(), name='listar_pendientes'),
 ]

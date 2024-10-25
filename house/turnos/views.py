@@ -55,3 +55,13 @@ class CambiarEstadoTurnoStaffView(LoginRequiredMixin, PermissionRequiredMixin, U
     def form_valid(self, form):
         form.instance.usuario_staff = self.request.user
         return super().form_valid(form)
+
+#Vista para listar los turnos pendientes
+class TurnosPendientesView(ListView):
+    model = Turno
+    template_name = 'turnos/listar_turnos_pendientes.html'
+    context_object_name = 'turnos'
+
+    def get_queryset(self):
+        # Obtener los últimos 5 turnos en estado pendiente
+        return Turno.objects.filter(estado='P').order_by('-fecha_creacion')[:5]
