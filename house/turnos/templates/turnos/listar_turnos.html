@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lista de Turnos</title>
+</head>
+<body>
+    <h1>Lista de Turnos</h1>
+    <p>Bienvenido, {{ user.username }}</p>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Número de Turno</th>
+                <th>Fecha de Creación</th>
+                <th>Estado</th>
+                <th>Usuario</th>
+                <th>Usuario Staff</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for turno in turnos %}
+                <tr>
+                    <td>{{ turno.numero_turno }}</td>
+                    <td>{{ turno.fecha_creacion|date:"d M Y H:i" }}</td>
+                    <td>{{ turno.get_estado_display }}</td>
+                    <td>{{ turno.usuario.username }}</td>
+                    <td>{% if turno.usuario_staff %}{{ turno.usuario_staff.username }}{% else %}-{% endif %}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="5">No hay turnos disponibles</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'turnos:nuevo' %}">Crear un nuevo Turno</a>
+</body>
+</html>
