@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Turnos</title>
+</head>
+<body>
+    <h1>Lista de Turnos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Usuario</th>
+                <th>Estado</th>
+                <th>Fecha Creación</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for turno in object_list %}
+            <tr>
+                <td>{{ turno.numero_turno }}</td>
+                <td>{{ turno.usuario }}</td>
+                <td>{{ turno.get_estado_display }}</td>
+                <td>{{ turno.fecha_creacion }}</td>
+                <td>
+                    <a href="{% url 'turnos:editar' turno.pk %}">Editar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
