@@ -1,0 +1,30 @@
+<!-- usuarios/templates/usuarios/listar_pacientes.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pacientes</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4 mb-4">Lista de Pacientes</h1>
+        <ul class="list-group">
+            {% for paciente in pacientes %}
+                <li class="list-group-item d-flex align-items-center">
+                    {% if paciente.foto_perfil %}
+                        <img src="{{ paciente.foto_perfil.url }}" alt="Foto de perfil de {{ paciente.username }}" width="50" height="50" class="me-3">
+                    {% else %}
+                        <img src="{% static 'images/default-profile.png' %}" alt="Foto de perfil no disponible" width="50" height="50" class="me-3">
+                    {% endif %}
+                    <div>
+                        <strong>{{ paciente.first_name }} {{ paciente.last_name }}</strong> - Celular: {{ paciente.celular }}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

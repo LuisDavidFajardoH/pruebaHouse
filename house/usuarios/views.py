@@ -61,3 +61,13 @@ class TurnoListAPIView(APIView):
         turnos = Turno.objects.all()
         serializer = TurnoSerializer(turnos, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ListarPacientesView(ListView):
+    model = Usuario
+    template_name = 'usuarios/listar_pacientes.html'
+    context_object_name = 'pacientes'
+
+    def get_queryset(self):
+        # Listar todos los pacientes (usuarios)
+        return Usuario.objects.all()
