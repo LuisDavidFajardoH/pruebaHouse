@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Turno</title>
+</head>
+<body>
+    <h2>Crear Turno</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Crear Turno</button>
+    </form>
+    <a href="{% url 'turnos:listar' %}">Volver a la lista de turnos</a>
+</body>
+</html>

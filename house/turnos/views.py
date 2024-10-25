@@ -1,39 +1,52 @@
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import ListView, CreateView, UpdateView
 from .models import Turno
 from django.urls import reverse_lazy
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 
-# Solo los usuarios autenticados pueden acceder a esta vista
+User = get_user_model()
+
+# Vista para listar turnos (solo usuarios autenticados)
 class TurnoListView(LoginRequiredMixin, ListView):
     model = Turno
     template_name = 'turnos/listar_turnos.html'
     login_url = 'login'  # Redirigir al inicio de sesión si no está autenticado
 
-# Solo los usuarios autenticados pueden acceder a esta vista
+# Vista para crear un nuevo turno
+
 class TurnoCreateView(LoginRequiredMixin, CreateView):
     model = Turno
-    fields = ['usuario', 'estado']
+    fields = ['estado', 'usuario']  # Puedes dejar que se seleccione el usuario a asignar
     template_name = 'turnos/form_turno.html'
     success_url = reverse_lazy('turnos:listar')
     login_url = 'login'  # Redirigir al inicio de sesión si no está autenticado
 
-# Solo los usuarios autenticados con permisos pueden acceder a esta vista
-class TurnoUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
+    def form_valid(self, form):
+        # Validación adicional si es necesario
+        usuario_asignado = form.cleaned_data['usuario']
+        if not usuario_asignado:
+            form.add_error('usuario', 'Por favor, seleccione un usuario válido.')
+        return super().form_valid(form)
+
+# Vista para editar un turno existente (modificar estado)
+class TurnoUpdateView(LoginRequiredMixin, UpdateView):
     model = Turno
-    fields = ['estado', 'usuario_staff']
+    fields = ['estado', 'usuario_staff']  # Campos a ser editados
     template_name = 'turnos/form_turno.html'
     success_url = reverse_lazy('turnos:listar')
     login_url = 'login'  # Redirigir al inicio de sesión si no está autenticado
-    permission_required = 'turnos.change_turno'  # Verifica que el usuario tenga permiso para cambiar turnos
 
-class CambiarEstadoTurnoStaffView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+# Vista para cambiar el estado del turno, accesible solo para el staff
+class CambiarEstadoTurnoStaffView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Turno
-    fields = ['estado']
-    template_name = 'turnos/cambiar_estado_turno.html'
+    fields = ['estado']  # Cambiar solo el estado
+    template_name = 'turnos/form_cambiar_estado.html'
     success_url = reverse_lazy('turnos:listar')
-    login_url = 'login'  # Redirigir al inicio de sesión si no está autenticado
+    login_url = 'login'
+    permission_required = 'turnos.change_turno'
 
-    # Esta función verifica si el usuario tiene permisos de staff
-    def test_func(self):
-        return self.request.user.is_staff
-
+    def form_valid(self, form):
+        # Asignar el usuario autenticado como el usuario Staff que cambia el estado
+        form.instance.usuario_staff = self.request.user
+        return super().form_valid(form)

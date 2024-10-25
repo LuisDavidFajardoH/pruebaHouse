@@ -5,7 +5,7 @@ from usuarios.views import RegistroUsuario
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('turnos/', include('turnos.urls')),  # Incluye las URLs de la app 'turnos'
+    path('turnos/', include(('turnos.urls', 'turnos'), namespace='turnos')),
     path('usuarios/', include('usuarios.urls')),  # Incluye las URLs de la app 'usuarios'
     path('accounts/login/', LoginView.as_view(), name='login'),
     path('accounts/registro/', RegistroUsuario.as_view(), name='registro'),

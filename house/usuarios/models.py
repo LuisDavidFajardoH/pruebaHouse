@@ -2,8 +2,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 class Usuario(AbstractUser):
-    celular = models.CharField(max_length=20)
-    identificacion = models.CharField(max_length=15, unique=True)
+    celular = models.CharField(max_length=20, blank=True, null=True)  # Si 'celular' no es crucial, permite que sea opcional
+    identificacion = models.CharField(max_length=15, unique=True)  # Deja la restricción de unicidad pero asegúrate de llenarlo siempre.
     foto_perfil = models.ImageField(upload_to='perfiles/', blank=True, null=True)
 
     # Opciones de roles
